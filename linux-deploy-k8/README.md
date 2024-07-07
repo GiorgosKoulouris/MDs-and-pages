@@ -87,6 +87,23 @@ cd /path/to/directory
 ./00-linux-deploy-k8.sh -r init-cluster
 ```
 
+<h4>all</h4>
+
+Executes the above actions in the following sequence:
+
+- os-bootstrap
+- create-user
+- install-kube
+- init-cluster
+
+To execute:
+
+```bash
+cd /path/to/directory
+# Perform all actions
+./00-linux-deploy-k8.sh -r all
+```
+
 
 
 <h2>Extra Options</h2>
