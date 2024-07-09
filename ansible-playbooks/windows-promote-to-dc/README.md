@@ -26,6 +26,10 @@ The following items are all prerequisites for the script to execute properly
 
 Download and extract all components and navigate to the folder containing the script and the roles. Edit the CSV with all the necessary info. You don't need any inventory or variable file, these are generated dynamically during runtime based on the CSV file.
 
+<b>Note:</b> When executing the script in list mode, <u>you cannot have 2 target hosts with the same hostname</u>, as it generates unexpected results.
+
+
+
 ```bash
 wget https://gk-tools.s3.eu-central-1.amazonaws.com/public/ANSB/windows-promote-to-dc.tar.gz
 tar -xzf windows-promote-to-dc.tar.gz
@@ -45,6 +49,7 @@ vi 01-hostInfo.csv # To edit. Do not remove the trailing commas on each row, the
 # Example 4: Cleanup all files containing sensitive information
 ./00-win-promote-to-dc.sh --cleanup
 ```
+
 
 <h2>Connectivity</h2>
 
