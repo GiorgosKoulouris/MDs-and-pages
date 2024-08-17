@@ -4,10 +4,6 @@
 
 Running this script will initiate the downloaded ansible playbook to promote one or more Windows Servers to Domain Controllers
 
-<h2>Downloads</h2>
-
-Get the script and its dependencies: <a href='https://gk-tools.s3.eu-central-1.amazonaws.com/public/ANSB/windows-promote-to-dc.tar.gz' target="_blank">Download</a>
-
 <h2>Prerequisites</h2>
 
 The following items are all prerequisites for the script to execute properly
@@ -15,8 +11,6 @@ The following items are all prerequisites for the script to execute properly
 * A UNIX system with ansible installed to execute the main bash script for the deployment
 * Credentials for a local administrator of the target system
 * Your target hosts will need internet access to download any necessary content
-* You will need the ansible role defined in the script. In case you need to download it again, you can find it
-	<a href='https://gk-tools.s3.eu-central-1.amazonaws.com/public/ANSB/windows-promote-to-dc.tar.gz' target="_blank">here</a>
 * Has been tested on the following:
 	- Windows Server 2016
 	- Windows Server 2019
@@ -31,9 +25,8 @@ Download and extract all components and navigate to the folder containing the sc
 
 
 ```bash
-wget https://gk-tools.s3.eu-central-1.amazonaws.com/public/ANSB/windows-promote-to-dc.tar.gz
-tar -xzf windows-promote-to-dc.tar.gz
-cd windows-promote-to-dc
+git clone https://github.com/GiorgosKoulouris/MDs-and-pages.git
+cd MDs-and-pages/ansible-playbooks/windows-promote-to-dc
 
 # Example 1: Promote a single server
 ./00-win-promote-to-dc.sh

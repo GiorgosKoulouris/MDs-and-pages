@@ -1,0 +1,10 @@
+---
+- name: Initialize kubernetes cluster | Worker nodes | Update host files
+  become: true
+  blockinfile:
+    path: /etc/hosts
+    block: "{{ hostfile_entries }}"
+    state: present
+
+- name: Initialize kubernetes cluster | Worker nodes | Join the cluster
+  shell: "{{ hostvars['controlNode1'].join_command }}"

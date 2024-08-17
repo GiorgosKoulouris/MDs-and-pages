@@ -1,0 +1,4 @@
+---
+- name: Load per host variables
+  when: load_hostvars is defined and load_hostvars
+  ansible.builtin.include_vars: "vars/hostvars/{{ hostname }}.yml"
