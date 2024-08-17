@@ -18,11 +18,9 @@ The following items are all prerequisites for the script to execute properly
 
 <h2>Usage</h2>
 
-Download and extract all components and navigate to the folder containing the script and the roles. Edit the CSV with all the necessary info. You don't need any inventory or variable file, these are generated dynamically during runtime based on the CSV file.
+Clone the repository and navigate to the folder containing the script and the roles. Edit the CSV with all the necessary info. You don't need any inventory or variable file, these are generated dynamically during runtime based on the CSV file.
 
 <b>Note:</b> When executing the script in list mode, <u>you cannot have 2 target hosts with the same hostname</u>, as it generates unexpected results.
-
-
 
 ```bash
 git clone https://github.com/GiorgosKoulouris/MDs-and-pages.git

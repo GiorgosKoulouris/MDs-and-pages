@@ -21,7 +21,7 @@ The following items are all prerequisites for the script to execute properly
 
 <h2>Usage</h2>
 
-Download and extract all components, navigate to the folder containing the script and the roles and execute the script providing the mandatory -r flag
+Clone the repository, navigate to the folder containing the script and the roles and execute the script providing the mandatory -r flag
 
 ```bash
 git clone https://github.com/GiorgosKoulouris/MDs-and-pages.git
