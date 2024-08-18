@@ -148,7 +148,6 @@ while true; do
   fi
 
   tmp="${mountStatus1}/${mountStatus2}"
-  echo "$fsStatus" | grep -iq available && tempStatus='available'
   echo "$tmp" | grep -iq failed && tempStatus='failed'
 
   if [ "$tempStatus" = 'available' ]; then
