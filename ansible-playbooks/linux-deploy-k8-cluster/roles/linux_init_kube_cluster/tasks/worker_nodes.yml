@@ -3,7 +3,7 @@
   become: true
   blockinfile:
     path: /etc/hosts
-    block: "{{ hostfile_entries }}"
+    block: "{{ lookup('file', cluster_hostfiles ) }}"
     state: present
 
 - name: Initialize kubernetes cluster | Worker nodes | Join the cluster

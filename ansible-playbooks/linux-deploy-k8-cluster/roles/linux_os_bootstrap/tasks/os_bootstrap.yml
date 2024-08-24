@@ -6,8 +6,7 @@
 
 - name: Change hostname
   become: true
-  shell: "hostnamectl set-hostname {{ ipHostnameMap[ansible_default_ipv4.address] }}"
-  when: ansible_default_ipv4.address in ipHostnameMap.keys()
+  shell: "hostnamectl set-hostname {{ hostname }}"
 
 - name: OS Bootstrap | Modify ssh settings
   become: true

@@ -44,11 +44,11 @@ create_inv_template() {
     echo "kubeuser_ssh_public_key_file=./ssh/newUser.pub"                   >> "$INV_FILE"
     echo "# -------------------------------------"                          >> "$INV_FILE"
     echo "[controlNodes]"                                                   >> "$INV_FILE"
-    echo "controlNode1    ansible_host=10.0.10.10"                          >> "$INV_FILE"
+    echo "controlNode1    ansible_host=10.0.10.10   hostname=k8ctl00"       >> "$INV_FILE"
     echo "# -------------------------------------"                          >> "$INV_FILE"
     echo "[workerNodes]"                                                    >> "$INV_FILE"
-    echo "workerNode1     ansible_host=10.0.10.12"                          >> "$INV_FILE"
-
+    echo "workerNode1     ansible_host=10.0.10.20   hostname=k8wnd00"       >> "$INV_FILE"
+    echo "workerNode2     ansible_host=10.0.10.21   hostname=k8wnd01"       >> "$INV_FILE"
 }
 
 check_args() {
@@ -349,10 +349,6 @@ os_bootstrap_pre() {
         esac
     done
 
-    echo
-    echo "Edit the displayed MOTD and the 'ipHostnameMap' variable based on your systems."
-    sleep 2
-    OS_MAIN_VARS_FILE='./roles/linux_os_bootstrap/vars/main.yml'
     [ -f "$OS_MAIN_VARS_FILE" ] && vi "$OS_MAIN_VARS_FILE" || ( echo "Vars file missing ($OS_MAIN_VARS_FILE)." && exit 1 )
 }
 
@@ -360,7 +356,8 @@ os_bootstrap_action() {
     echo
     print_line
     echo "Executing OS bootstrap..."
-    ansible-playbook linux_os_bootstrap.yml -i "$INV_FILE" --extra-vars "ansible_become_pass=$ANSIBLE_PASSWORD patch=$PATCH_SYSTEMS" || exit 1
+    ansible-playbook linux_os_bootstrap.yml -i "$INV_FILE" --extra-vars \
+        "ansible_become_pass='$ANSIBLE_PASSWORD' patch=$PATCH_SYSTEMS" || exit 1
 }
 
 create_user_pre() {
@@ -458,7 +455,7 @@ create_user_action() {
     echo "Creating user..."
 
     ansible-playbook linux_create_user.yml -i "$INV_FILE" \
-        --extra-vars "ansible_become_pass=$ANSIBLE_PASSWORD username=$KUBE_USER password=$PASSWORD_HASH"  || exit 1
+        --extra-vars "ansible_become_pass='$ANSIBLE_PASSWORD' username=$KUBE_USER password=$PASSWORD_HASH"  || exit 1
 }
 
 install_kubernetes_pre() {
@@ -485,14 +482,14 @@ install_kubernetes_action() {
     print_line
     echo "Installing kubernetes..."
     ansible-playbook linux_install_kubernetes.yml -i "$INV_FILE" \
-        --extra-vars "ansible_become_pass=$ANSIBLE_PASSWORD k8_version=$KUBE_VERSION"  || exit 1
+        --extra-vars "ansible_become_pass='$ANSIBLE_PASSWORD' k8_version=$KUBE_VERSION"  || exit 1
 }
 
 init_cluster_pre() {
     echo
     print_line
     echo "Cluster options..."
-    echo "Modify calico options and hostfile entries" && sleep 2 && vi './roles/linux_init_kube_cluster/vars/main.yml'
+    echo "Modify calico options" && sleep 2 && vi './roles/linux_init_kube_cluster/vars/main.yml'
 
     if [ $BLOCK == 'init-cluster' ]; then
         while true; do
@@ -538,7 +535,16 @@ init_cluster_action() {
     print_line
     echo "Initializing cluster..."
 
-    ansible-playbook linux_init_kube_cluster.yml -i "$INV_FILE" --extra-vars "ansible_become_pass=$ANSIBLE_PASSWORD kube_user=$KUBE_USER populate_conf=$POPULATE_CONF_TO_USER" || exit 1
+    HOSTFILE_BLOCK=$(grep hostname 01-hosts.ini| awk '{print $2, $3}' | awk -F= '{print $2, $3}' | awk '{print $1, $3}')
+    HOSTFILE_TEMP_FILE='./roles/linux_init_kube_cluster/vars/hosts.tmp'
+    echo "$HOSTFILE_BLOCK" > "$HOSTFILE_TEMP_FILE"
+
+    ansible-playbook linux_init_kube_cluster.yml -i "$INV_FILE" --extra-vars \
+        "ansible_become_pass='$ANSIBLE_PASSWORD' kube_user=$KUBE_USER \
+        populate_conf=$POPULATE_CONF_TO_USER cluster_hostfiles=$HOSTFILE_TEMP_FILE"
+
+    rm -f $HOSTFILE_TEMP_FILE
+    if [ "$?" != '0' ]; then exit 1; fi
 }
 
 execute_all() {
