@@ -76,8 +76,8 @@ fi
 
 rm -f policy.json
 
-aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy --role-name "$NODE_ROLE_NAME" &&
-  aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly --role-name "$NODE_ROLE_NAME" &&
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy --role-name "$NODE_ROLE_NAME" && \
+  aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly --role-name "$NODE_ROLE_NAME"
 verify_status "Attached policies to node role" "Failed to attach policies to node role"
 
 print_line "Creating node group $NODEGROUP_NAME..."

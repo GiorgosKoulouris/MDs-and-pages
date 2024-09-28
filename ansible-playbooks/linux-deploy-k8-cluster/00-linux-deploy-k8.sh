@@ -535,7 +535,7 @@ init_cluster_action() {
     print_line
     echo "Initializing cluster..."
 
-    HOSTFILE_BLOCK=$(grep hostname 01-hosts.ini| awk '{print $2, $3}' | awk -F= '{print $2, $3}' | awk '{print $1, $3}')
+    HOSTFILE_BLOCK=$(grep hostname 01-hosts.ini| grep -Ev "(^;|^#)" |awk '{print $2, $3}' | awk -F= '{print $2, $3}' | awk '{print $1, $3}')
     HOSTFILE_TEMP_FILE='./roles/linux_init_kube_cluster/vars/hosts.tmp'
     echo "$HOSTFILE_BLOCK" > "$HOSTFILE_TEMP_FILE"
 
