@@ -1,5 +1,0 @@
----
-- name: Load variables
-  include_tasks: load_vars.yml
-- name: Promote to DC
-  include_tasks: promote.yml
